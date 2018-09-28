@@ -15,6 +15,22 @@ module.exports.homepage = function (req, res, next) {
     // return res.json({job: "job"});
 };
 
+module.exports.checkuser = function(req, res, next){
+    console.log(req.body.user);
+    if (req.body.user != null ) {
+        console.log(req.user);
+        UserModel.findOne({email: req.body.user}).then(function(error,user){
+            if (error) {
+                
+                return res.sendStatus(404);
+            }
+            if(user){
+                return res.json({user: user});
+            }
+        })
+    }
+}
+
 //showall jobs
 module.exports.browseJobs = function (req, res, next) {
     var page = parseInt(req.query.pageno) | 0;
@@ -54,16 +70,16 @@ module.exports.browseJobs = function (req, res, next) {
 
 module.exports.signup = function (req, res, next) {
     var user = new UserModel();
-    console.log("hello");
+    // console.log("hello");
 
     user.username = req.body.user.username;
     user.email = req.body.user.email;
     user.password = req.body.user.password;
     user.mobile = req.body.user.mobile;
-    user.currentLocation = req.body.user.currentLocation;
+    // user.currentLocation = req.body.user.currentLocation;
 
     user.save().then(function () {
-        console.log("*******")
+        // console.log("*******")
         return res.json({ user: user.toAuthJSON() });
     }).catch(next);
 
